@@ -1,5 +1,4 @@
 """
-
 论文地址: https://www.researchgate.net/publication/221618573_A_Neural_Probabilistic_Language_Model
 modified from https://github.com/graykode/nlp-tutorial/blob/master/1-1.NNLM/NNLM.py
 NNLM分为两个阶段:
