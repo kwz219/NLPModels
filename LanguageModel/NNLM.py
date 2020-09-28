@@ -8,6 +8,8 @@ NNLM分为两个阶段:
 对于NNLM存在的疑问:
     1.为什么要将输入层和输出层直接相连(即原文中的Wx)
         将原始输入当作基本特征的扩充,有直连可以减少迭代次数
+NNLM的缺点:
+    1.需提前设定n_step,无法处理变长输入
 """
 import torch
 import torch.nn as nn
@@ -36,7 +38,7 @@ class NNLM(nn.Module):
         self.b = nn.Parameter(torch.ones(vocab_size))
     def forward(self,x):
         "input x: [batchsize,n_step]"
-        X = self.C(x)  # X : [batch_size, n_step, vocab_size]
+        X = self.C(x)  # X : [batch_size, n_step, m]
         X = X.view(-1, self.n_step * self.m)  # [batch_size, n_step * m]
         tanhX = torch.tanh(self.d + self.H(X))  # [batch_size, n_hidden]
         output = self.b + self.W(X) + self.U(tanhX)  # [batch_size, n_vocab_size]

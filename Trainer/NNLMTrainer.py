@@ -2,7 +2,9 @@ import torch
 from LanguageModel.NNLM import NNLM
 import torch.nn as nn
 import torch.optim as optim
-def make_batch():
+
+"make_batch： 对于每一个sentence,将最后一个单词当作target,前面所有单词当作input"
+def make_batch(sentences):
     input_batch = []
     target_batch = []
     for sen in sentences:
@@ -25,13 +27,15 @@ if __name__ == '__main__':
     number_dict = {i: w for i, w in enumerate(word_list)}
 
     vocab_size = len(word_dict)  # number of Vocabulary
+
+    "构造NNLM模型,声明损失函数和梯度下降方法"
     model = NNLM(vocab_size,m,n_hidden,n_step)
     criterion = nn.CrossEntropyLoss()
-
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    input_batch, target_batch = make_batch()
+    input_batch, target_batch = make_batch(sentences)
     input_batch = torch.LongTensor(input_batch)
     target_batch = torch.LongTensor(target_batch)
+    print(input_batch.size(),target_batch.size())
 
     # Training
     for epoch in range(5000):
